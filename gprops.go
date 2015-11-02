@@ -4,14 +4,26 @@
 
 /*
 Package gprops implements simple properties object, similar
-to java one.
+to the one know from java.
 */
 package gprops
 
 // Props type is an object containing properties.
-type Props map[string]string
+type Props struct {
+	propsMap map[string]string
+}
 
 // New method creates a new empty Props object.
-func New() Props {
-	return make(Props)
+func New() *Props {
+	return &Props{propsMap: make(map[string]string)}
+}
+
+// Add new property
+func (props *Props) Add(key, value string) {
+	props.propsMap[key] = value
+}
+
+// Get property value for the key
+func (props *Props) Get(key string) string {
+	return props.propsMap[key]
 }
