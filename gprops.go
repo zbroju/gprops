@@ -14,16 +14,30 @@ type Props struct {
 }
 
 // New method creates a new empty Props object.
-func New() *Props {
+func NewProps() *Props {
 	return &Props{propsMap: make(map[string]string)}
 }
 
-// Add new property
-func (props *Props) Add(key, value string) {
+// Set method sets new value for given key. If the key doesn't exist, it will be created.
+func (props *Props) Set(key, value string) {
 	props.propsMap[key] = value
 }
 
-// Get property value for the key
+// Get method returns property value for the key
 func (props *Props) Get(key string) string {
 	return props.propsMap[key]
 }
+
+// ContainsKey method returns true if given key exists.
+func (props *Props) ContainsKey(key string) bool {
+	_, exists := props.propsMap[key]
+	return exists
+}
+
+// Delete method removes existing property.
+func (props *Props) Delete(key string) {
+	delete(props.propsMap, key)
+}
+
+//TODO: Load(reader reader)
+//TODO: Store(writer writer, comments string)
