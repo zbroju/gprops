@@ -4,9 +4,16 @@
 
 /*
 Package gprops implements simple properties object, similar
-to the one know from java.
+to the one known from java.
 */
 package gprops
+
+import (
+	"bufio"
+	"errors"
+	"io"
+	"strings"
+)
 
 // Props type is an object containing properties.
 type Props struct {
@@ -39,5 +46,28 @@ func (props *Props) Delete(key string) {
 	delete(props.propsMap, key)
 }
 
-//TODO: Load(reader reader)
+// Load loads properties from a reader (e.g. config gile) to the properties and return error in case of problems.
+// Lines with '#' at the beginning are skipped.
+func (props *Props) Load(r io.Reader) error {
+	scanner := bufio.NewScanner(r)
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		if !strings.HasPrefix(line, "#") {
+			keyValuePair := strings.Split(line, "=")
+			if len(keyValuePair) == 2 {
+				props.Set(strings.TrimSpace(keyValuePair[0]), strings.TrimSpace(keyValuePair[1]))
+			} else {
+				return errors.New("gprops: incorrect syntax in input data.")
+			}
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		return err
+	} else {
+		return nil
+	}
+}
+
 //TODO: Store(writer writer, comments string)
