@@ -5,6 +5,9 @@
 /*
 Package gprops implements simple properties object, similar
 to the one known from java.
+
+It can be used to store and load simple configuration data in a form
+of key = value pair.
 */
 package gprops
 
@@ -46,13 +49,12 @@ func (props *Props) Delete(key string) {
 	delete(props.propsMap, key)
 }
 
-// Load loads properties from a reader (e.g. config gile) to the properties and return error in case of problems.
+// Load loads properties from a reader (e.g. config file) to the properties and return error in case of problems.
 // Lines with '#' at the beginning are skipped.
 func (props *Props) Load(r io.Reader) error {
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		line := scanner.Text()
-
 		if !strings.HasPrefix(line, "#") {
 			keyValuePair := strings.Split(line, "=")
 			if len(keyValuePair) == 2 {
@@ -70,4 +72,17 @@ func (props *Props) Load(r io.Reader) error {
 	}
 }
 
-//TODO: Store(writer writer, comments string)
+// Store stores properties using a given writer (e.g. config file) and return in case of problems.
+// You can add comment, which will be stored as first line beginning with '#'.
+func (props *Props) Store(w *bufio.Writer, comment string) error {
+	if comment != "" {
+		w.WriteString("# " + comment + "\n")
+	}
+	for key, value := range props.propsMap {
+		_, err := w.WriteString(key + "=" + value + "\n")
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}

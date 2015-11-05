@@ -1,9 +1,9 @@
 package gprops_test
 
 import (
+	"bufio"
 	"github.com/zbroju/gprops"
 	"io/ioutil"
-	"log"
 	"os"
 	"testing"
 )
@@ -50,8 +50,12 @@ func TestLoad(t *testing.T) {
 	// Create temporary data & file
 	tempFile := "tempRCData"
 
-	keyAndValues := []string{"# Example config file", "FILE", "/home/user/myfile", "VERBOSE", "true"}
-	byteStream := []byte(keyAndValues[0] + "\n" + keyAndValues[1] + " = " + keyAndValues[2] + "\n" + keyAndValues[3] + " = " + keyAndValues[4] + "\n")
+	comment := "# Example config file"
+	key1 := "FILE"
+	val1 := "/home/user/myfile"
+	key2 := "VERBOSE"
+	val2 := "true"
+	byteStream := []byte(comment + "\n" + key1 + " = " + val1 + "\n" + key2 + " = " + val2 + "\n")
 
 	err := ioutil.WriteFile(tempFile, byteStream, 0644)
 	if err != nil {
@@ -62,7 +66,7 @@ func TestLoad(t *testing.T) {
 	// Open temporary file
 	file, err := os.Open(tempFile)
 	if err != nil {
-		log.Fatal(err)
+		t.Errorf(err.Error())
 	}
 	defer file.Close()
 
@@ -72,7 +76,47 @@ func TestLoad(t *testing.T) {
 	if errLoad != nil {
 		t.Errorf(errLoad.Error())
 	}
-	if properties.Get(keyAndValues[1]) != keyAndValues[2] || properties.Get(keyAndValues[3]) != keyAndValues[4] {
+	if properties.Get(key1) != val1 || properties.Get(key2) != val2 {
 		t.Errorf("Data loaded from file are not as expected.\n")
 	}
+}
+
+func TestStore(t *testing.T) {
+	// Prepare the properties to store
+	propsToStore := gprops.NewProps()
+	key1 := "key1"
+	val1 := "val1"
+	key2 := "key2"
+	val2 := "val2"
+	propsToStore.Set(key1, val1)
+	propsToStore.Set(key2, val2)
+
+	// Store properties in file
+	tempFile := "temporaryPropsFile"
+	f, err := os.Create(tempFile)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+	w := bufio.NewWriter(f)
+	propsToStore.Store(w, "Test properties")
+	w.Flush()
+	f.Close()
+
+	// Load the properties from the file
+	propsLoaded := gprops.NewProps()
+	f2, err := os.Open(tempFile)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+	defer f2.Close()
+	errLoad := propsLoaded.Load(f2)
+	if errLoad != nil {
+		t.Errorf(errLoad.Error())
+	}
+
+	// Compare the properties
+	if propsLoaded.Get(key1) != propsToStore.Get(key1) || propsLoaded.Get(key2) != propsToStore.Get(key2) {
+		t.Errorf("Data stored in a file are not as expected.\n")
+	}
+	os.Remove(tempFile)
 }
