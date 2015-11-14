@@ -1,5 +1,7 @@
 # gprops
 
+## Description
+
 Package gprops implements simple properties object, similar
 to the one known from java.
 
@@ -10,7 +12,15 @@ of:
 
 pairs. Bear in mind that both 'key' and 'value' are strings. All lines beginning with '#' are omitted - assuming they are comments.
 
-## Example of configuration file
+## Installation
+
+This package can be installed with the go get command:
+
+    go get github.com/zbroju/gprops
+
+## Documentation
+
+### Example of configuration file
 
     # ----------------------------------------------------
     # Example of configuration file made by gprops package
@@ -22,15 +32,15 @@ pairs. Bear in mind that both 'key' and 'value' are strings. All lines beginning
 
     # All lines starting with '#' are skipped, assuming they are just comments
 
-## Usage
+### Usage
 Remember to include gprops package in your application:
 
     import "github.com/zbroju/gprops"
 
-### Load properties from file
+#### Load properties from file
 
     // Open config file
-    file, err := os.Open(configFile)
+    file, err := os.Open(".configFile")
     if err != nil {
         fmt.Println(err)
     }
@@ -47,7 +57,7 @@ Remember to include gprops package in your application:
     file := properties.Get("DATA_FILE") // variable 'file' contains "/home/.examplerc" value.
     verboseFlag := properties.Get("VERBOSE") // variable 'verboseFlag' contains "1" value.
 
-### Save properties to a file
+#### Save properties to a file
 
     // Prepare properties object
     properties := gprops.NewProps()
@@ -55,8 +65,7 @@ Remember to include gprops package in your application:
     properties.Set("VERBOSE", "1")
 
     // Create new file with properties
-    configFile := ".examplerc"
-    f, err := os.Create(configFile)
+    f, err := os.Create(".configFile")
     if err != nil {
         fmt.Println(err.Error())
     }
@@ -64,3 +73,10 @@ Remember to include gprops package in your application:
     // Store properties in the file
     propsToStore.Store(f, "Example of configuration file made by gprops package")
     f.Close()
+
+## License
+
+GNU General Public License.
+
+## Author
+Marcin 'Zbroju' Zbroiński
