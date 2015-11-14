@@ -44,8 +44,8 @@ Remember to include gprops package in your application:
     }
 
     // Assuming the config file looks like the example above
-    file := properties.Get("DATA_FILE")
-    verboseFlag := properties.Get("VERBOSE")
+    file := properties.Get("DATA_FILE") // variable 'file' contains "/home/.examplerc" value.
+    verboseFlag := properties.Get("VERBOSE") // variable 'verboseFlag' contains "1" value.
 
 ### Save properties to a file
 
