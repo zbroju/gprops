@@ -67,7 +67,7 @@ if err != nil {
 }
 
 // Store properties in the file
-propsToStore.Store(f, "Example of configuration file made by gprops package")
+properties.Store(f, "Example of configuration file made by gprops package")
 f.Close()
 ```
 ## License
