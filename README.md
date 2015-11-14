@@ -49,16 +49,10 @@ Remember to include gprops package in your application:
 
 ### Save properties to a file
 
-    // Prepare some settings
-    key1 := "DATA_FILE"
-    value1 := "/home/.examplerc"
-    key2 := "VERBOSE"
-    value2 := 1
-
     // Prepare properties object
     properties := gprops.NewProps()
-    properties.Set(key1, value1)
-    properties.Set(key2, value2)
+    properties.Set("DATA_FILE", "/home/.examplerc")
+    properties.Set("VERBOSE", "1")
 
     // Create new file with properties
     configFile := ".examplerc"
