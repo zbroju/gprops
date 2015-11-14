@@ -20,6 +20,11 @@ import (
 	"strings"
 )
 
+const (
+	commentPrefix    = "#"
+	settingSeparator = "="
+)
+
 // Props type is an object containing properties.
 type Props struct {
 	propsMap map[string]string
@@ -57,8 +62,8 @@ func (props *Props) Load(r io.Reader) error {
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		line := scanner.Text()
-		if !strings.HasPrefix(line, "#") {
-			keyValuePair := strings.Split(line, "=")
+		if !strings.HasPrefix(line, commentPrefix) {
+			keyValuePair := strings.Split(line, settingSeparator)
 			if len(keyValuePair) == 2 {
 				props.Set(strings.TrimSpace(keyValuePair[0]), strings.TrimSpace(keyValuePair[1]))
 			} else {
@@ -76,12 +81,15 @@ func (props *Props) Load(r io.Reader) error {
 
 // Store stores properties using a given writer (e.g. config file) and return in case of problems.
 // You can add comment, which will be stored as first line beginning with '#'.
-func (props *Props) Store(w *bufio.Writer, comment string) error {
+func (props *Props) Store(w io.Writer, comment string) error {
+	bw := bufio.NewWriter(w)
+	defer bw.Flush()
+
 	if comment != "" {
-		w.WriteString("# " + comment + "\n")
+		bw.WriteString(commentPrefix + " " + comment + "\n")
 	}
 	for key, value := range props.propsMap {
-		_, err := w.WriteString(key + "=" + value + "\n")
+		_, err := bw.WriteString(key + settingSeparator + value + "\n")
 		if err != nil {
 			return err
 		}

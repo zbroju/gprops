@@ -1,7 +1,6 @@
 package gprops_test
 
 import (
-	"bufio"
 	"github.com/zbroju/gprops"
 	"io/ioutil"
 	"os"
@@ -97,9 +96,7 @@ func TestStore(t *testing.T) {
 	if err != nil {
 		t.Errorf(err.Error())
 	}
-	w := bufio.NewWriter(f)
-	propsToStore.Store(w, "Test properties")
-	w.Flush()
+	propsToStore.Store(f, "Test properties")
 	f.Close()
 
 	// Load the properties from the file
