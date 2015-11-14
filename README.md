@@ -2,7 +2,7 @@
 
 ## Description
 
-Package `gprops` implements simple properties object, similar to the one known from java.
+Package `gprops` implements simple properties object for applications written in `golang`, similar to the one known from java.
 
 It can be used to store and load simple configuration data in a form of pairs:
 ```
