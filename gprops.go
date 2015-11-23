@@ -1,4 +1,4 @@
-// Copyright 2015 Marcin 'Zbroju' Zbroinski. All rights reserved.
+// Written 2015 by Marcin 'Zbroju' Zbroinski. All rights reserved.
 // Use of this source code is governed by GNU General Public License
 // that can be found in the LICENCE file.
 
