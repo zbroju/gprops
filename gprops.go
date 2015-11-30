@@ -25,13 +25,13 @@ const (
 	settingSeparator = "="
 )
 
-// Props type is an object containing properties.
+// Properties type is an object containing properties.
 type Properties struct {
 	propertiesMap map[string]string
 }
 
 // New method creates a new empty Props object.
-func NewProperties() *Properties {
+func New() *Properties {
 	return &Properties{propertiesMap: make(map[string]string)}
 }
 
@@ -40,22 +40,22 @@ func (props *Properties) Set(key, value string) {
 	props.propertiesMap[key] = value
 }
 
-// GetProperty method returns property value for the key
+// Get method returns property value for the key
 func (props *Properties) Get(key string) string {
 	return props.propertiesMap[key]
 }
 
-// GetPropertyOrDefault method returns property value for the key, or default value if the property does not exist
+// GetOrDefault method returns property value for the key if it exist, or default value if otherwise.
 func (props *Properties) GetOrDefault(key, defaultValue string) string {
-	if props.ContainsKey(key) {
+	if props.Contains(key) {
 		return props.propertiesMap[key]
 	} else {
 		return defaultValue
 	}
 }
 
-// ContainsKey method returns true if given key exists.
-func (props *Properties) ContainsKey(key string) bool {
+// Contains method returns true if given key exists.
+func (props *Properties) Contains(key string) bool {
 	_, exists := props.propertiesMap[key]
 	return exists
 }

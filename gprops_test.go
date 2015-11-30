@@ -8,17 +8,17 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	properties := gprops.NewProperties()
+	properties := gprops.New()
 	properties.Set("key1", "value1")
 }
 
 func TestSet(t *testing.T) {
-	properties := gprops.NewProperties()
+	properties := gprops.New()
 	properties.Set("key1", "value1")
 }
 
 func TestGet(t *testing.T) {
-	properties := gprops.NewProperties()
+	properties := gprops.New()
 	properties.Set("key1", "value1")
 	if properties.Get("key1") != "value1" {
 		t.Errorf("Returned value is not as expected.\n")
@@ -26,21 +26,21 @@ func TestGet(t *testing.T) {
 }
 
 func TestContainsKey(t *testing.T) {
-	properties := gprops.NewProperties()
+	properties := gprops.New()
 	properties.Set("key", "")
-	if properties.ContainsKey("key") == false {
+	if properties.Contains("key") == false {
 		t.Errorf("Returns false for existing key.\n")
 	}
-	if properties.ContainsKey("anotherkey") == true {
+	if properties.Contains("anotherkey") == true {
 		t.Errorf("Returns true for not existing key.\n")
 	}
 }
 
 func TestDelete(t *testing.T) {
-	properties := gprops.NewProperties()
+	properties := gprops.New()
 	properties.Set("key1", "value1")
 	properties.Delete("key1")
-	if properties.ContainsKey("key1") == true {
+	if properties.Contains("key1") == true {
 		t.Errorf("The key has not been deleted.\n")
 	}
 }
@@ -70,7 +70,7 @@ func TestLoad(t *testing.T) {
 	defer file.Close()
 
 	// Try to load properties and read the data
-	properties := gprops.NewProperties()
+	properties := gprops.New()
 	errLoad := properties.Load(file)
 	if errLoad != nil {
 		t.Errorf(errLoad.Error())
@@ -82,7 +82,7 @@ func TestLoad(t *testing.T) {
 
 func TestStore(t *testing.T) {
 	// Prepare the properties to store
-	propsToStore := gprops.NewProperties()
+	propsToStore := gprops.New()
 	key1 := "key1"
 	val1 := "val1"
 	key2 := "key2"
@@ -100,7 +100,7 @@ func TestStore(t *testing.T) {
 	f.Close()
 
 	// Load the properties from the file
-	propsLoaded := gprops.NewProperties()
+	propsLoaded := gprops.New()
 	f2, err := os.Open(tempFile)
 	if err != nil {
 		t.Errorf(err.Error())
