@@ -26,39 +26,48 @@ const (
 )
 
 // Props type is an object containing properties.
-type Props struct {
-	propsMap map[string]string
+type Properties struct {
+	propertiesMap map[string]string
 }
 
 // New method creates a new empty Props object.
-func NewProps() *Props {
-	return &Props{propsMap: make(map[string]string)}
+func NewProperties() *Properties {
+	return &Properties{propertiesMap: make(map[string]string)}
 }
 
 // Set method sets new value for given key. If the key doesn't exist, it will be created.
-func (props *Props) Set(key, value string) {
-	props.propsMap[key] = value
+func (props *Properties) Set(key, value string) {
+	props.propertiesMap[key] = value
 }
 
-// Get method returns property value for the key
-func (props *Props) Get(key string) string {
-	return props.propsMap[key]
+// GetProperty method returns property value for the key
+func (props *Properties) Get(key string) string {
+	return props.propertiesMap[key]
+}
+
+// GetPropertyOrDefault method returns property value for the key, or default value if the property does not exist
+func (props *Properties) GetOrDefault(key, defaultValue string) string {
+	if props.ContainsKey(key) {
+		return props.propertiesMap[key]
+	} else {
+		return defaultValue
+	}
 }
 
 // ContainsKey method returns true if given key exists.
-func (props *Props) ContainsKey(key string) bool {
-	_, exists := props.propsMap[key]
+func (props *Properties) ContainsKey(key string) bool {
+	_, exists := props.propertiesMap[key]
 	return exists
 }
 
 // Delete method removes existing property.
-func (props *Props) Delete(key string) {
-	delete(props.propsMap, key)
+func (props *Properties) Delete(key string) {
+	delete(props.propertiesMap, key)
 }
 
 // Load loads properties from a reader (e.g. config file) to the properties and return error in case of problems.
 // Lines with '#' at the beginning are skipped.
-func (props *Props) Load(r io.Reader) error {
+func (props *Properties) Load(r io.Reader) error {
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -81,14 +90,14 @@ func (props *Props) Load(r io.Reader) error {
 
 // Store stores properties using a given writer (e.g. config file) and return in case of problems.
 // You can add comment, which will be stored as first line beginning with '#'.
-func (props *Props) Store(w io.Writer, comment string) error {
+func (props *Properties) Store(w io.Writer, comment string) error {
 	bw := bufio.NewWriter(w)
 	defer bw.Flush()
 
 	if comment != "" {
 		bw.WriteString(commentPrefix + " " + comment + "\n")
 	}
-	for key, value := range props.propsMap {
+	for key, value := range props.propertiesMap {
 		_, err := bw.WriteString(key + settingSeparator + value + "\n")
 		if err != nil {
 			return err

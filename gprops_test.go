@@ -8,17 +8,17 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	properties := gprops.NewProps()
+	properties := gprops.NewProperties()
 	properties.Set("key1", "value1")
 }
 
 func TestSet(t *testing.T) {
-	properties := gprops.NewProps()
+	properties := gprops.NewProperties()
 	properties.Set("key1", "value1")
 }
 
 func TestGet(t *testing.T) {
-	properties := gprops.NewProps()
+	properties := gprops.NewProperties()
 	properties.Set("key1", "value1")
 	if properties.Get("key1") != "value1" {
 		t.Errorf("Returned value is not as expected.\n")
@@ -26,7 +26,7 @@ func TestGet(t *testing.T) {
 }
 
 func TestContainsKey(t *testing.T) {
-	properties := gprops.NewProps()
+	properties := gprops.NewProperties()
 	properties.Set("key", "")
 	if properties.ContainsKey("key") == false {
 		t.Errorf("Returns false for existing key.\n")
@@ -37,7 +37,7 @@ func TestContainsKey(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	properties := gprops.NewProps()
+	properties := gprops.NewProperties()
 	properties.Set("key1", "value1")
 	properties.Delete("key1")
 	if properties.ContainsKey("key1") == true {
@@ -70,7 +70,7 @@ func TestLoad(t *testing.T) {
 	defer file.Close()
 
 	// Try to load properties and read the data
-	properties := gprops.NewProps()
+	properties := gprops.NewProperties()
 	errLoad := properties.Load(file)
 	if errLoad != nil {
 		t.Errorf(errLoad.Error())
@@ -82,7 +82,7 @@ func TestLoad(t *testing.T) {
 
 func TestStore(t *testing.T) {
 	// Prepare the properties to store
-	propsToStore := gprops.NewProps()
+	propsToStore := gprops.NewProperties()
 	key1 := "key1"
 	val1 := "val1"
 	key2 := "key2"
@@ -100,7 +100,7 @@ func TestStore(t *testing.T) {
 	f.Close()
 
 	// Load the properties from the file
-	propsLoaded := gprops.NewProps()
+	propsLoaded := gprops.NewProperties()
 	f2, err := os.Open(tempFile)
 	if err != nil {
 		t.Errorf(err.Error())
