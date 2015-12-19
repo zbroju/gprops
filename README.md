@@ -36,18 +36,12 @@ import "github.com/zbroju/gprops"
 #### Load properties from file
 ``` go
 // Open config file
-file, err := os.Open(".configFile")
-if err != nil {
-    fmt.Println(err)
-}
+file, _ := os.Open(".configFile")
 defer file.Close()
 
 // Try to load properties and read the data
 properties := gprops.NewProps()
-errLoad := properties.Load(file)
-if errLoad != nil {
-    fmt.Println(errLoad.Error())
-}
+_ := properties.Load(file)
 
 // Assuming the config file looks like the example above
 file := properties.Get("DATA_FILE") // variable 'file' contains "/home/.examplerc" value.
@@ -61,10 +55,7 @@ properties.Set("DATA_FILE", "/home/.examplerc")
 properties.Set("VERBOSE", "1")
 
 // Create new file with properties
-f, err := os.Create(".configFile")
-if err != nil {
-    fmt.Println(err.Error())
-}
+f, _ := os.Create(".configFile")
 
 // Store properties in the file
 properties.Store(f, "Example of configuration file made by gprops package")
