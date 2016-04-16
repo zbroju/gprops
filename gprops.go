@@ -71,12 +71,12 @@ func (props *Properties) Load(r io.Reader) error {
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		line := scanner.Text()
-		if !strings.HasPrefix(line, commentPrefix) {
+		if !strings.HasPrefix(line, commentPrefix) && len(line)>0 {
 			keyValuePair := strings.Split(line, settingSeparator)
 			if len(keyValuePair) == 2 {
 				props.Set(strings.TrimSpace(keyValuePair[0]), strings.TrimSpace(keyValuePair[1]))
 			} else {
-				return errors.New("gprops: incorrect syntax in input data.")
+				return errors.New("incorrect syntax in config file.")
 			}
 		}
 	}
