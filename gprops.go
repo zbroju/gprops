@@ -92,7 +92,7 @@ func (props *Properties) Load(r io.Reader) error {
 // You can add comment, which will be stored as first line beginning with '#'.
 func (props *Properties) Store(w io.Writer, comment string) error {
 	bw := bufio.NewWriter(w)
-	defer bw.Flush()
+	//defer bw.Flush()
 
 	if comment != "" {
 		bw.WriteString(commentPrefix + " " + comment + "\n")
@@ -102,6 +102,10 @@ func (props *Properties) Store(w io.Writer, comment string) error {
 		if err != nil {
 			return err
 		}
+	}
+	err := bw.Flush()
+	if err != nil {
+		return err
 	}
 	return nil
 }
